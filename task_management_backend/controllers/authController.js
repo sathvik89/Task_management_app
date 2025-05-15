@@ -10,14 +10,19 @@ exports.login = async (req, res) => {
     const user = await User.findOne({ email });
     if (!user) return res.status(400).json({ message: "User not found" });
 
-    const isMatch = await bcrypt.compare(password, user.password); //bcrypt ye password security ke liye
+    const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ message: "Wrong password" });
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "1d",
     });
 
+    // Make sure to include isAdmin in response:
     const { password: _, ...userData } = user._doc;
+
+    // Log it to confirm
+    // console.log("User data sent to client:", userData);
+
     res.json({ user: userData, token });
   } catch (err) {
     console.error(err);
@@ -25,10 +30,9 @@ exports.login = async (req, res) => {
   }
 };
 
-// Register controller (NEW)
 exports.register = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, isAdmin } = req.body; // Accept isAdmin from request
 
     // Check if user already exists
     const existingUser = await User.findOne({ email });
@@ -36,7 +40,13 @@ exports.register = async (req, res) => {
       return res.status(400).json({ message: "Email already registered" });
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new User({ name, email, password: hashedPassword });
+    // Pass isAdmin when creating the user; defaults to false if not provided
+    const newUser = new User({
+      name,
+      email,
+      password: hashedPassword,
+      isAdmin: !!isAdmin,
+    });
 
     await newUser.save();
     res.status(201).json({ message: "User registered" });
