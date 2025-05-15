@@ -1,44 +1,62 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useRef, useState } from "react";
 import { FiMail, FiLock } from "react-icons/fi";
-
-const Login = () => {
-  const navigate = useNavigate();
-
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
-
+import Button from "../Components/Button";
+import { login } from "../api";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../AuthContext";
+export default function Login() {
+  const [showPass, setShowPass] = useState(false);
   const [errors, setErrors] = useState({
     email: "",
     password: "",
   });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    setErrors((prev) => ({ ...prev, [name]: "" }));
+  const emailRef = useRef(null);
+  const passwordRef = useRef(null);
+  const navigate = useNavigate();
+  const { setCredentials } = useAuth();
+
+  const validate = () => {
+    let isValid = true;
+    const newErrors = {
+      email: "",
+      password: "",
+    };
+
+    if (!emailRef.current.value.trim()) {
+      newErrors.email = "Email is required";
+      isValid = false;
+    }
+
+    if (!passwordRef.current.value.trim()) {
+      newErrors.password = "Password is required";
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    return isValid;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    let isValid = true;
+    if (!validate()) return;
 
-    if (!formData.email) {
-      setErrors((prev) => ({ ...prev, email: "Email is required" }));
-      isValid = false;
-    }
+    try {
+      const res = await login(
+        emailRef.current.value,
+        passwordRef.current.value
+      );
 
-    if (!formData.password) {
-      setErrors((prev) => ({ ...prev, password: "Password is required" }));
-      isValid = false;
-    }
-
-    if (isValid) {
-      console.log("Logging in:", formData);
-      navigate("/dashboard");
+      if (res?.user) {
+        setCredentials(res.user, res.token); // Save to context + localStorage
+        navigate("/dashboard");
+      } else {
+        alert("Login failed: No user returned");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      alert("Invalid email or password. Please try again.");
     }
   };
 
@@ -48,10 +66,10 @@ const Login = () => {
       style={{ backgroundColor: "#FEF9F0" }}
     >
       <div className="text-center mb-10">
-        <p className="text-sm text-[#14B8A6] font-medium tracking-wide">
+        <p className="text-sm text-[#14B8A6] font-large tracking-wide">
           Manage all your tasks in one place!
         </p>
-        <h1 className="text-4xl font-extrabold text-[#111827] mt-3 leading-snug">
+        <h1 className="text-5xl font-extrabold text-[#111827] mt-3 leading-snug">
           Task Manager App
         </h1>
         <div className="w-16 h-16 mx-auto mt-5 rounded-full bg-[#14B8A6] flex items-center justify-center shadow-md">
@@ -69,18 +87,13 @@ const Login = () => {
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <div className="relative">
-              <FiMail
-                className="absolute left-3 top-3.5 text-[#14B8A6]"
-                size={20}
-              />
+            <div className="relative flex items-center">
+              <FiMail className="absolute left-3 text-[#14B8A6]" size={20} />
               <input
+                ref={emailRef}
                 type="email"
                 id="email"
-                name="email"
                 placeholder="email@example.com"
-                value={formData.email}
-                onChange={handleChange}
                 className={`pl-10 pr-4 py-2 w-full rounded-lg border text-sm text-[#111827] bg-white ${
                   errors.email
                     ? "border-red-400 focus:ring-red-200"
@@ -92,42 +105,46 @@ const Login = () => {
               <p className="mt-1 text-xs text-red-500">{errors.email}</p>
             )}
           </div>
-
           <div>
-            <div className="relative">
-              <FiLock
-                className="absolute left-3 top-3.5 text-[#14B8A6]"
-                size={20}
-              />
+            <div className="relative flex items-center">
+              <FiLock className="absolute left-3 text-[#14B8A6]" size={20} />
               <input
-                type="password"
+                ref={passwordRef}
+                type={showPass ? "text" : "password"}
                 id="password"
-                name="password"
                 placeholder="••••••••"
-                value={formData.password}
-                onChange={handleChange}
                 className={`pl-10 pr-4 py-2 w-full rounded-lg border text-sm text-[#111827] bg-white ${
                   errors.password
                     ? "border-red-400 focus:ring-red-200"
                     : "border-gray-300 focus:ring-[#6EE7B7]"
                 } focus:outline-none focus:ring-2`}
               />
+              <button
+                type="button"
+                onClick={() => setShowPass((prev) => !prev)}
+                className="absolute right-3 hover:cursor-pointer text-sm text-[#14B8A6] font-medium focus:outline-none hover:text-teal-700 transition-colors duration-200"
+              >
+                {showPass ? "Hide" : "Show"}
+              </button>
             </div>
             {errors.password && (
               <p className="mt-1 text-xs text-red-500">{errors.password}</p>
             )}
           </div>
-
-          <button
-            type="submit"
-            className="w-full py-2.5 px-4 bg-[#14B8A6] hover:bg-teal-600 text-white font-semibold rounded-lg shadow-md transition-colors duration-200 transform hover:scale-[1.01]"
-          >
-            Sign In
-          </button>
+          <div className="text-right mt-2">
+            <span
+              onClick={() => {
+                // Add your custom logic here (e.g. open modal or navigate)
+                console.log("Forgot password clicked");
+              }}
+              className="text-sm text-[#14B8A6] hover:text-teal-700 font-medium cursor-pointer transition-colors duration-200"
+            >
+              Forgot Password?
+            </span>
+          </div>
+          <Button type="submit">Submit</Button>
         </form>
       </div>
     </div>
   );
-};
-
-export default Login;
+}

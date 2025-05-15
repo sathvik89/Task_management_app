@@ -6,9 +6,9 @@ import Tasks from "./pages/Tasks";
 import Users from "./pages/Users";
 import Trash from "./pages/Trash";
 import TaskDetails from "./pages/TaskDetails";
-// import { Toaster } from "sooner";
+import { useAuth } from "./AuthContext";
 function MainFrame() {
-  const user = "";
+  const { user } = useAuth();
   const location = useLocation();
   return user ? (
     <div>
@@ -40,7 +40,6 @@ function App() {
         </Route>
         <Route path="/login" element={<Login />} />
       </Routes>
-      {/* <Toaster richColors /> */}
     </div>
   );
 }
