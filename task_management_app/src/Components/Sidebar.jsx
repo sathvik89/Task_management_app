@@ -51,8 +51,8 @@ const linkData = [
 
 const Sidebar = () => {
   const { user } = useAuth();
+  // console.log("Sidebar user:", user);
   const location = useLocation();
-  //   const currentPath = location.pathname.split("/")[1];
   const sidebarLinks = user?.isAdmin ? linkData : linkData.slice(0, 5);
 
   return (
