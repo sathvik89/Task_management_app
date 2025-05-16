@@ -1,15 +1,20 @@
+"use client";
+
 import { useRef, useState } from "react";
 import { FiMail, FiLock } from "react-icons/fi";
 import Button from "../Components/Button";
 import { login } from "../api";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../AuthContext";
+
 export default function Login() {
   const [showPass, setShowPass] = useState(false);
   const [errors, setErrors] = useState({
     email: "",
     password: "",
   });
+  const [isLoading, setIsLoading] = useState(false);
+  const [apiError, setApiError] = useState("");
 
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
@@ -39,9 +44,11 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setApiError("");
 
     if (!validate()) return;
 
+    setIsLoading(true);
     try {
       const res = await login(
         emailRef.current.value,
@@ -52,11 +59,15 @@ export default function Login() {
         setCredentials(res.user, res.token); // Save to context + localStorage
         navigate("/dashboard");
       } else {
-        alert("Login failed: No user returned");
+        setApiError("Login failed: No user returned");
       }
     } catch (error) {
       console.error("Login error:", error);
-      alert("Invalid email or password. Please try again.");
+      setApiError(
+        error.message || "Invalid email or password. Please try again."
+      );
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -84,6 +95,12 @@ export default function Login() {
         <p className="text-sm text-gray-500 text-center mb-6">
           Keep all your credentials safe.
         </p>
+
+        {apiError && (
+          <div className="mb-4 p-3 bg-red-50 text-red-600 rounded-lg text-sm">
+            {apiError}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
@@ -142,8 +159,22 @@ export default function Login() {
               Forgot Password?
             </span>
           </div>
-          <Button type="submit">Submit</Button>
+          <Button type="submit" disabled={isLoading}>
+            {isLoading ? "Signing In..." : "Sign In"}
+          </Button>
         </form>
+
+        <div className="mt-6 text-center">
+          <p className="text-sm text-gray-600">
+            Don't have an account?{" "}
+            <Link
+              to="/register"
+              className="text-[#14B8A6] hover:text-teal-700 font-medium"
+            >
+              Register now
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );
