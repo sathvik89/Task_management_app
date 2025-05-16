@@ -27,6 +27,7 @@ const TaskModal = ({ isOpen, onClose, task, onSuccess }) => {
           : "",
       });
     } else {
+      // Reset form for new task
       setFormData({
         title: "",
         description: "",
@@ -35,6 +36,7 @@ const TaskModal = ({ isOpen, onClose, task, onSuccess }) => {
         dueDate: "",
       });
     }
+    // Clear any previous errors
     setError("");
   }, [task, isOpen]);
 

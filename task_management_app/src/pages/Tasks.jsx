@@ -17,9 +17,11 @@ const Tasks = () => {
   const [showFilters, setShowFilters] = useState(false);
 
   useEffect(() => {
+    // If we're on a specific status route, update the filters
     if (status) {
       updateFilters({ status });
     } else {
+      // Reset status filter if we're on the main tasks page
       updateFilters({ status: "" });
     }
   }, [status]);

@@ -1,26 +1,27 @@
 "use client";
+
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getTaskById, updateTask, deleteTask } from "../api";
 import { FiCalendar, FiEdit2, FiTrash2 } from "react-icons/fi";
 import TaskModal from "../Components/TaskModal";
-export default function TaskDetails() {
+
+const TaskDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [task, setTask] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
   useEffect(() => {
     const fetchTask = async () => {
-      setLoading(true);
-      setError(null);
       try {
         const data = await getTaskById(id);
         setTask(data);
       } catch (err) {
-        console.error("Error loading task:", err);
-        setError("Couldn't fetch task. Try again later.");
+        console.error("Error fetching task:", err);
+        setError("Failed to load task details. Please try again.");
       } finally {
         setLoading(false);
       }
@@ -31,55 +32,53 @@ export default function TaskDetails() {
 
   const handleStatusChange = async (newStatus) => {
     try {
-      const updated = await updateTask(id, { ...task, status: newStatus });
-      setTask(updated);
+      const updatedTask = await updateTask(id, { ...task, status: newStatus });
+      setTask(updatedTask);
     } catch (err) {
-      console.error("Failed to update task:", err);
+      console.error("Error updating task status:", err);
     }
   };
 
   const handleDelete = async () => {
-    const confirm = window.confirm(
-      "Are you sure you want to delete this task?"
-    );
-    if (!confirm) return;
-
-    try {
-      await deleteTask(id);
-      navigate("/tasks");
-    } catch (err) {
-      console.error("Failed to delete task:", err);
+    if (window.confirm("Are you sure you want to delete this task?")) {
+      try {
+        await deleteTask(id);
+        navigate("/tasks");
+      } catch (err) {
+        console.error("Error deleting task:", err);
+      }
     }
   };
 
-  const formatDate = (dateStr) => {
-    if (!dateStr) return "No due date";
+  const formatDate = (dateString) => {
+    if (!dateString) return "No due date";
     const options = { year: "numeric", month: "long", day: "numeric" };
-    return new Date(dateStr).toLocaleDateString(undefined, options);
+    return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <div className="animate-spin h-10 w-10 border-4 border-[#14B8A6] border-t-transparent rounded-full"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#14B8A6]"></div>
       </div>
     );
   }
 
   if (error) {
-    return <div className="bg-red-100 text-red-700 p-4 rounded">{error}</div>;
+    return <div className="bg-red-50 text-red-600 p-4 rounded-lg">{error}</div>;
   }
 
   if (!task) {
     return (
-      <div className="bg-white p-6 rounded shadow text-center">
-        <h2 className="text-lg font-semibold text-gray-700">Task not found</h2>
+      <div className="bg-white rounded-lg shadow-md p-8 text-center">
+        <h3 className="text-xl font-medium text-gray-700">Task not found</h3>
       </div>
     );
   }
+
   return (
-    <div className="max-w-4xl mx-auto px-4 py-6">
-      <div className="bg-white rounded-xl shadow border border-gray-100 overflow-hidden">
+    <div className="max-w-4xl mx-auto">
+      <div className="bg-white rounded-xl shadow-md overflow-hidden">
         {/* Header */}
         <div className="p-6 border-b border-gray-100">
           <div className="flex justify-between items-start">
@@ -108,17 +107,16 @@ export default function TaskDetails() {
                 </span>
               </div>
             </div>
-
             <div className="flex gap-2">
               <button
                 onClick={() => setIsModalOpen(true)}
-                className="p-2 text-gray-500 hover:text-[#14B8A6] hover:bg-gray-100 rounded-full"
+                className="p-2 text-gray-500 hover:text-[#14B8A6] hover:bg-gray-100 rounded-full transition-colors"
               >
                 <FiEdit2 size={18} />
               </button>
               <button
                 onClick={handleDelete}
-                className="p-2 text-gray-500 hover:text-red-500 hover:bg-gray-100 rounded-full"
+                className="p-2 text-gray-500 hover:text-red-500 hover:bg-gray-100 rounded-full transition-colors"
               >
                 <FiTrash2 size={18} />
               </button>
@@ -142,6 +140,7 @@ export default function TaskDetails() {
             </p>
           </div>
 
+          {/* Status Change */}
           <div className="border-t border-gray-100 pt-6">
             <h3 className="text-lg font-medium text-[#111827] mb-3">
               Change Status
@@ -149,30 +148,30 @@ export default function TaskDetails() {
             <div className="flex flex-wrap gap-3">
               <button
                 onClick={() => handleStatusChange("todo")}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   task.status === "todo"
                     ? "bg-amber-100 text-amber-700 border-2 border-amber-300"
-                    : "bg-white text-gray-700 border border-gray-200 hover:bg-amber-50"
+                    : "bg-white border border-gray-200 text-gray-700 hover:bg-amber-50"
                 }`}
               >
                 To Do
               </button>
               <button
                 onClick={() => handleStatusChange("in-progress")}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   task.status === "in-progress"
                     ? "bg-blue-100 text-blue-700 border-2 border-blue-300"
-                    : "bg-white text-gray-700 border border-gray-200 hover:bg-blue-50"
+                    : "bg-white border border-gray-200 text-gray-700 hover:bg-blue-50"
                 }`}
               >
                 In Progress
               </button>
               <button
                 onClick={() => handleStatusChange("completed")}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   task.status === "completed"
                     ? "bg-green-100 text-green-700 border-2 border-green-300"
-                    : "bg-white text-gray-700 border border-gray-200 hover:bg-green-50"
+                    : "bg-white border border-gray-200 text-gray-700 hover:bg-green-50"
                 }`}
               >
                 Completed
@@ -181,6 +180,8 @@ export default function TaskDetails() {
           </div>
         </div>
       </div>
+
+      {/* Task Edit Modal */}
       <TaskModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
@@ -192,4 +193,6 @@ export default function TaskDetails() {
       />
     </div>
   );
-}
+};
+
+export default TaskDetails;
