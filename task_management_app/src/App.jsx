@@ -32,12 +32,15 @@ function MainFrame() {
       </aside>
 
       {/* Mobile Sidebar Toggle Button */}
-      <button
-        className="absolute top-4 left-4 md:hidden z-40 bg-white p-2 rounded-md shadow-md border border-gray-200"
-        onClick={() => setMobileOpen(true)}
-      >
-        <IoMenu size={24} className="text-[#14B8A6]" />
-      </button>
+      {!mobileOpen && (
+        <button
+          className="absolute top-4 left-4 md:hidden z-40 bg-white p-2 rounded-md shadow-md border border-gray-200"
+          onClick={() => setMobileOpen(true)}
+          aria-label="Open menu"
+        >
+          <IoMenu size={24} className="text-[#14B8A6]" />
+        </button>
+      )}
 
       {/* Mobile Sidebar + Backdrop */}
       {mobileOpen && (
@@ -46,8 +49,9 @@ function MainFrame() {
             <Sidebar />
           </aside>
           <div
-            className="fixed inset-0 bg-black bg-opacity-30 z-40"
+            className="fixed inset-0 backdrop-blur-sm bg-white/30 z-40"
             onClick={() => setMobileOpen(false)}
+            aria-label="Close menu backdrop"
           />
         </>
       )}
@@ -55,7 +59,7 @@ function MainFrame() {
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col">
         <div className="sticky top-0 z-30">
-          <Navbar />
+          <Navbar isMobileMenuOpen={mobileOpen} />
         </div>
         <div className="flex-1 px-4 py-6 overflow-auto">
           <Outlet />

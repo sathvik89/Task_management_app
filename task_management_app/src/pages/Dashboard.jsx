@@ -120,7 +120,7 @@ const Dashboard = () => {
           className="mt-4 md:mt-0 flex items-center gap-2 bg-[#14B8A6] hover:bg-teal-600 text-white px-4 py-2 rounded-lg shadow-md transition-colors duration-200"
         >
           <MdOutlineAddTask size={20} />
-          <span>New Task</span>
+          <span>add New Task</span>
         </button>
       </div>
 
