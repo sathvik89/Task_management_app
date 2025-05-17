@@ -1,46 +1,41 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
+// Middleware to protect routes
 exports.protect = async (req, res, next) => {
-  try {
-    let token;
+  let token;
 
-    // Check if token exists in Authorization header
-    if (
-      req.headers.authorization &&
-      req.headers.authorization.startsWith("Bearer")
-    ) {
-      token = req.headers.authorization.split(" ")[1];
-    }
-
-    if (!token) {
-      return res.status(401).json({ message: "Not authorized, no token" });
-    }
-
+  // Check if token exists in headers
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
     try {
+      // Get token from header
+      token = req.headers.authorization.split(" ")[1];
+
       // Verify token
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
       // Get user from token
-      const user = await User.findById(decoded.id).select("-password");
+      req.user = {
+        id: decoded.id,
+        isAdmin: decoded.isAdmin,
+      };
 
-      if (!user) {
-        return res.status(401).json({ message: "User not found" });
-      }
-
-      // Add user to request object
-      req.user = user;
       next();
     } catch (error) {
-      console.error("Token verification error:", error);
-      return res.status(401).json({ message: "Not authorized, token failed" });
+      console.error("Auth middleware error:", error);
+      res.status(401).json({ message: "Not authorized, token failed" });
     }
-  } catch (error) {
-    console.error("Auth middleware error:", error);
-    res.status(500).json({ message: "Server error in authentication" });
+  }
+
+  if (!token) {
+    res.status(401).json({ message: "Not authorized, no token" });
   }
 };
 
+// Middleware for admin-only routes
 exports.admin = (req, res, next) => {
   if (req.user && req.user.isAdmin) {
     next();

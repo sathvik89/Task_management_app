@@ -4,7 +4,7 @@ const taskSchema = new mongoose.Schema(
   {
     title: {
       type: String,
-      required: [true, "Task title is required"],
+      required: true,
       trim: true,
     },
     description: {
@@ -18,13 +18,12 @@ const taskSchema = new mongoose.Schema(
     },
     category: {
       type: String,
-      enum: ["Personal", "Work", "Urgent", "Other"],
       default: "Other",
     },
     dueDate: {
       type: Date,
     },
-    createdBy: {
+    userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
@@ -33,8 +32,14 @@ const taskSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    deletedAt: {
+      type: Date,
+      default: null,
+    },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
 
 module.exports = mongoose.model("Task", taskSchema);

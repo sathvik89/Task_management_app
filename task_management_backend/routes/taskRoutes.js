@@ -8,12 +8,12 @@ router.use(protect);
 
 // Task routes
 router.get("/", taskController.getTasks);
-router.get("/trash", taskController.getDeletedTasks);
-router.get("/stats", taskController.getTaskStats);
-router.get("/:id", taskController.getTask);
 router.post("/", taskController.createTask);
+router.get("/stats", taskController.getTaskStats);
+router.get("/trash", taskController.getDeletedTasks);
+router.get("/:id", taskController.getTaskById);
 router.put("/:id", taskController.updateTask);
-router.delete("/:id", taskController.softDeleteTask);
+router.delete("/:id", taskController.deleteTask);
 router.put("/:id/restore", taskController.restoreTask);
 router.delete("/:id/permanent", taskController.permanentDeleteTask);
 
