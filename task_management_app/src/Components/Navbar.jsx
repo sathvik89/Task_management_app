@@ -23,23 +23,17 @@ const Navbar = () => {
   };
 
   return (
-    <div className="flex justify-between items-center bg-[#FEF9F0] px-6 py-3 sticky top-0 z-20 shadow-sm border-b border-gray-200">
+    <div className="flex flex-wrap justify-between items-center bg-[#FEF9F0] px-4 sm:px-6 py-3 sticky top-0 z-20 shadow-sm border-b border-gray-200">
       {/* Left side: Logo + Search */}
-      <div className="flex items-center gap-6 w-full max-w-4xl">
+      <div className="flex items-center gap-4 w-full max-w-4xl flex-1 min-w-0">
         {/* Logo area */}
-        <div className="hidden md:flex items-center gap-2">
-          <div className="bg-[#14B8A6] text-2xl font-extrabold p-2 rounded-full shadow">
-            📚
-          </div>
-          <h1 className="text-xl font-bold text-[#111827]">TaskEase</h1>
-        </div>
 
         {/* Search input */}
         <form
           onSubmit={handleSearch}
-          className="flex items-center flex-1 max-w-md gap-3 py-2 px-5 rounded-full bg-[#F0FDF4] border border-[#D1FAE5] shadow-sm focus-within:ring-2 focus-within:ring-[#14B8A6] transition"
+          className="flex items-center flex-1 max-w-full gap-3 py-2 px-4 sm:px-5 rounded-full bg-[#F0FDF4] border border-[#D1FAE5] shadow-sm focus-within:ring-2 focus-within:ring-[#14B8A6] transition w-full"
         >
-          <MdOutlineSearch className="text-[#14B8A6] text-2xl" />
+          <MdOutlineSearch className="text-[#14B8A6] text-xl sm:text-2xl" />
           <input
             type="text"
             placeholder="Search tasks, team, projects..."
@@ -49,7 +43,7 @@ const Navbar = () => {
           />
           <button
             type="submit"
-            className={`text-sm font-medium rounded-full px-3 py-1 transition-colors ${
+            className={`text-xs sm:text-sm font-medium rounded-full px-3 py-1.5 transition-colors ${
               searchQuery.trim()
                 ? "bg-[#14B8A6] text-white hover:bg-teal-600"
                 : "bg-gray-100 text-gray-400 cursor-not-allowed"
@@ -62,10 +56,10 @@ const Navbar = () => {
       </div>
 
       {/* Right side: Notifications + Profile */}
-      <div className="flex items-center gap-6">
+      <div className="flex items-center gap-4 sm:gap-6 mt-3 sm:mt-0">
         <button
           aria-label="Notifications"
-          className="relative text-[#14B8A6] hover:text-[#0d9488] transition-colors duration-200 text-2xl"
+          className="relative text-[#14B8A6] hover:text-[#0d9488] transition-colors duration-200 text-xl sm:text-2xl"
         >
           <IoNotificationsOutline />
           <span className="absolute -top-1 -right-1 h-2.5 w-2.5 rounded-full bg-red-500 border-2 border-[#FEF9F0]" />

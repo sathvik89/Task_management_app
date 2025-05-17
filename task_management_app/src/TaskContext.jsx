@@ -29,6 +29,7 @@ export const TaskProvider = ({ children }) => {
     status: "",
     category: "",
     sortBy: "createdAt",
+    searchQuery: "",
   });
 
   // Fetch tasks based on current filters
@@ -39,7 +40,20 @@ export const TaskProvider = ({ children }) => {
     setError(null);
     try {
       const data = await getTasks(filters);
-      setTasks(data);
+
+      // If we have a search query, filter tasks client-side
+      // This is a fallback in case the backend doesn't support search
+      if (filters.searchQuery && data.length > 0) {
+        const query = filters.searchQuery.toLowerCase();
+        const filteredData = data.filter(
+          (task) =>
+            task.title.toLowerCase().includes(query) ||
+            (task.description && task.description.toLowerCase().includes(query))
+        );
+        setTasks(filteredData);
+      } else {
+        setTasks(data);
+      }
     } catch (err) {
       console.error("Error fetching tasks:", err);
       setError(err.message || "Failed to load tasks. Please try again.");

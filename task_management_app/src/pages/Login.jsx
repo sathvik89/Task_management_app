@@ -15,7 +15,8 @@ export default function Login() {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [apiError, setApiError] = useState("");
-
+  const [isAdmin, setIsAdmin] = useState(false);
+  console.log(isAdmin);
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
   const navigate = useNavigate();
@@ -69,6 +70,22 @@ export default function Login() {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  // Function to fill in demo credentials
+  const fillDemoCredentials = (type) => {
+    if (type === "admin") {
+      emailRef.current.value = "boss@gmail.com";
+      passwordRef.current.value = "boss@9";
+      setIsAdmin(true);
+    } else {
+      emailRef.current.value = "user@gmail.com";
+      passwordRef.current.value = "123456";
+      setIsAdmin(false);
+    }
+    // Clear any previous errors
+    setErrors({ email: "", password: "" });
+    setApiError("");
   };
 
   return (
@@ -152,17 +169,38 @@ export default function Login() {
             <span
               onClick={() => {
                 // Add your custom logic here (e.g. open modal or navigate)
-                console.log("Forgot password clicked");
+                alert("please register again");
               }}
               className="text-sm text-[#14B8A6] hover:text-teal-700 font-medium cursor-pointer transition-colors duration-200"
             >
               Forgot Password?
             </span>
           </div>
-          <Button type="submit" disabled={isLoading}>
+          <Button className="cursor-pointer" type="submit" disabled={isLoading}>
             {isLoading ? "Signing In..." : "Sign In"}
           </Button>
         </form>
+
+        {/* Demo Account Options */}
+        <div className="mt-6">
+          <p className="text-center text-sm text-gray-600 mb-3">
+            Or try with demo accounts
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <button
+              onClick={() => fillDemoCredentials("user")}
+              className="cursor-pointer flex-1 py-2 px-3 border border-[#14B8A6] bg-[#ffffff] rounded-lg text-sm font-medium text-[#14B8A6] transition-all duration-200 hover:shadow-md hover:scale-[1.02] hover:bg-[#D1FAE5]"
+            >
+              Demo User
+            </button>
+            <button
+              onClick={() => fillDemoCredentials("admin")}
+              className="flex-1 py-2 px-3 border cursor-pointer border-[#14B8A6] bg-[#ffffff] rounded-lg text-sm font-medium text-[#14B8A6] transition-all duration-200 hover:shadow-md hover:scale-[1.02] hover:bg-[#D1FAE5]"
+            >
+              Demo Admin
+            </button>
+          </div>
+        </div>
 
         <div className="mt-6 text-center">
           <p className="text-sm text-gray-600">

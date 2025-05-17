@@ -15,12 +15,14 @@ export default function Register() {
     password: "",
     confirmPassword: "",
   });
+
   const [isLoading, setIsLoading] = useState(false);
   const [apiError, setApiError] = useState("");
 
   const nameRef = useRef(null);
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
+  const isAdminRef = useRef(null);
   const confirmPasswordRef = useRef(null);
   const navigate = useNavigate();
   const { setCredentials } = useAuth();
@@ -75,7 +77,8 @@ export default function Register() {
       const res = await register(
         nameRef.current.value,
         emailRef.current.value,
-        passwordRef.current.value
+        passwordRef.current.value,
+        isAdminRef.current.checked
       );
 
       if (res?.user && res?.token) {
@@ -98,13 +101,13 @@ export default function Register() {
       style={{ backgroundColor: "#FEF9F0" }}
     >
       <div className="text-center mb-8">
-        <p className="text-sm text-[#14B8A6] font-large tracking-wide">
+        <p className="text-sm text-[#0f766e] font-semibold tracking-wide">
           Join our task management platform
         </p>
-        <h1 className="text-4xl font-extrabold text-[#111827] mt-3 leading-snug">
+        <h1 className="text-4xl font-extrabold text-gray-900 mt-3 leading-snug">
           Create Your Account
         </h1>
-        <div className="w-16 h-16 mx-auto mt-5 rounded-full bg-[#14B8A6] flex items-center justify-center shadow-md">
+        <div className="w-16 h-16 mx-auto mt-5 rounded-full bg-[#0f766e] flex items-center justify-center shadow-md">
           <span className="text-white font-bold text-xl">TM</span>
         </div>
       </div>
@@ -119,13 +122,13 @@ export default function Register() {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <div className="relative flex items-center">
-              <FiUser className="absolute left-3 text-[#14B8A6]" size={20} />
+              <FiUser className="absolute left-3 text-[#0f766e]" size={20} />
               <input
                 ref={nameRef}
                 type="text"
                 id="name"
                 placeholder="Your full name"
-                className={`pl-10 pr-4 py-2 w-full rounded-lg border text-sm text-[#111827] bg-white ${
+                className={`pl-10 pr-4 py-2 w-full rounded-lg border text-sm text-gray-900 placeholder-gray-500 bg-white ${
                   errors.name
                     ? "border-red-400 focus:ring-red-200"
                     : "border-gray-300 focus:ring-[#6EE7B7]"
@@ -139,13 +142,13 @@ export default function Register() {
 
           <div>
             <div className="relative flex items-center">
-              <FiMail className="absolute left-3 text-[#14B8A6]" size={20} />
+              <FiMail className="absolute left-3 text-[#0f766e]" size={20} />
               <input
                 ref={emailRef}
                 type="email"
                 id="email"
                 placeholder="email@example.com"
-                className={`pl-10 pr-4 py-2 w-full rounded-lg border text-sm text-[#111827] bg-white ${
+                className={`pl-10 pr-4 py-2 w-full rounded-lg border text-sm text-gray-900 placeholder-gray-500 bg-white ${
                   errors.email
                     ? "border-red-400 focus:ring-red-200"
                     : "border-gray-300 focus:ring-[#6EE7B7]"
@@ -159,13 +162,13 @@ export default function Register() {
 
           <div>
             <div className="relative flex items-center">
-              <FiLock className="absolute left-3 text-[#14B8A6]" size={20} />
+              <FiLock className="absolute left-3 text-[#0f766e]" size={20} />
               <input
                 ref={passwordRef}
                 type={showPass ? "text" : "password"}
                 id="password"
                 placeholder="••••••••"
-                className={`pl-10 pr-4 py-2 w-full rounded-lg border text-sm text-[#111827] bg-white ${
+                className={`pl-10 pr-4 py-2 w-full rounded-lg border text-sm text-gray-900 placeholder-gray-500 bg-white ${
                   errors.password
                     ? "border-red-400 focus:ring-red-200"
                     : "border-gray-300 focus:ring-[#6EE7B7]"
@@ -174,7 +177,7 @@ export default function Register() {
               <button
                 type="button"
                 onClick={() => setShowPass((prev) => !prev)}
-                className="absolute right-3 hover:cursor-pointer text-sm text-[#14B8A6] font-medium focus:outline-none hover:text-teal-700 transition-colors duration-200"
+                className="absolute right-3 hover:cursor-pointer text-sm text-[#0f766e] font-medium focus:outline-none hover:text-teal-800 transition-colors duration-200"
               >
                 {showPass ? "Hide" : "Show"}
               </button>
@@ -186,13 +189,13 @@ export default function Register() {
 
           <div>
             <div className="relative flex items-center">
-              <FiLock className="absolute left-3 text-[#14B8A6]" size={20} />
+              <FiLock className="absolute left-3 text-[#0f766e]" size={20} />
               <input
                 ref={confirmPasswordRef}
                 type={showPass ? "text" : "password"}
                 id="confirmPassword"
                 placeholder="Confirm password"
-                className={`pl-10 pr-4 py-2 w-full rounded-lg border text-sm text-[#111827] bg-white ${
+                className={`pl-10 pr-4 py-2 w-full rounded-lg border text-sm text-gray-900 placeholder-gray-500 bg-white ${
                   errors.confirmPassword
                     ? "border-red-400 focus:ring-red-200"
                     : "border-gray-300 focus:ring-[#6EE7B7]"
@@ -205,6 +208,20 @@ export default function Register() {
               </p>
             )}
           </div>
+          <div className="flex items-center">
+            <input
+              id="isAdmin"
+              type="checkbox"
+              ref={isAdminRef}
+              className="h-4 w-4 text-teal-700 focus:ring-teal-600 border-gray-300 rounded"
+            />
+            <label
+              htmlFor="isAdmin"
+              className="ml-2 block text-sm text-gray-900"
+            >
+              Register as Admin
+            </label>
+          </div>
 
           <Button type="submit" disabled={isLoading}>
             {isLoading ? "Creating Account..." : "Register"}
@@ -212,11 +229,11 @@ export default function Register() {
         </form>
 
         <div className="mt-6 text-center">
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-gray-900">
             Already have an account?{" "}
             <Link
               to="/login"
-              className="text-[#14B8A6] hover:text-teal-700 font-medium"
+              className="text-[#0f766e] hover:text-teal-800 font-medium transition-colors"
             >
               Sign in
             </Link>

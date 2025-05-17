@@ -22,43 +22,48 @@ const TaskCard = ({ task, onEdit, onDelete }) => {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md border border-gray-100 overflow-hidden hover:shadow-lg transition-shadow duration-300">
-      <div className="p-5">
+    <div className="relative bg-slate-50 rounded-xl shadow-md border border-gray-200 overflow-hidden hover:shadow-xl transition duration-300 ease-in-out w-full max-w-md mx-auto min-h-[220px]">
+      <div className="aspect-[5/3] h-auto p-5 flex flex-col justify-between gap-4 sm:gap-5">
         <div className="flex justify-between items-start">
           <Link
             to={`/TaskDetails/${task._id}`}
-            className="text-lg font-medium text-[#111827] hover:text-[#14B8A6] transition-colors line-clamp-1"
+            className="text-lg sm:text-xl font-semibold text-gray-800 hover:text-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-offset-2 transition-colors truncate max-w-[75%]"
+            title={task.title}
           >
             {task.title}
           </Link>
-          <div className="flex space-x-1">
+          <div className="flex space-x-2">
             <button
               onClick={onEdit}
-              className="p-1.5 text-gray-500 hover:text-[#14B8A6] hover:bg-[#E0F2F1] rounded-full transition-colors"
+              aria-label="Edit Task"
+              className="p-2 text-gray-500 hover:text-teal-600 hover:bg-teal-100 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-teal-300 focus:ring-offset-1"
+              type="button"
             >
-              <FiEdit2 size={16} />
+              <FiEdit2 size={18} />
             </button>
             <button
               onClick={handleDelete}
-              className="p-1.5 text-gray-500 hover:text-red-500 hover:bg-red-50 rounded-full transition-colors"
+              aria-label="Delete Task"
+              className="p-2 text-gray-500 hover:text-red-600 hover:bg-red-100 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-red-300 focus:ring-offset-1"
+              type="button"
             >
-              <FiTrash2 size={16} />
+              <FiTrash2 size={18} />
             </button>
           </div>
         </div>
 
-        <p className="text-gray-500 text-sm mt-2 line-clamp-2">
+        <p className="text-gray-600 text-sm sm:text-base leading-snug break-words line-clamp-3">
           {task.description || "No description"}
         </p>
 
-        <div className="mt-4 flex justify-between items-center">
+        <div className="flex justify-between items-center gap-3 flex-wrap">
           <span
-            className={`text-xs font-medium px-2.5 py-0.5 rounded-full ${
+            className={`text-xs sm:text-sm font-semibold px-3 py-1 rounded-full select-none ${
               task.status === "todo"
-                ? "bg-amber-100 text-amber-700"
+                ? "bg-amber-200 text-amber-800"
                 : task.status === "in-progress"
-                ? "bg-blue-100 text-blue-700"
-                : "bg-green-100 text-green-700"
+                ? "bg-blue-200 text-blue-800"
+                : "bg-green-200 text-green-800"
             }`}
           >
             {task.status === "todo"
@@ -67,14 +72,14 @@ const TaskCard = ({ task, onEdit, onDelete }) => {
               ? "In Progress"
               : "Completed"}
           </span>
-          <span className="text-xs text-gray-500">
+          <span className="text-xs sm:text-sm text-gray-500 truncate max-w-[50%] sm:max-w-[60%]">
             {task.category || "Other"}
           </span>
         </div>
 
         {task.dueDate && (
-          <div className="mt-3 flex items-center text-xs text-[#14B8A6]">
-            <FiCalendar size={12} className="mr-1" />
+          <div className="flex items-center text-xs sm:text-sm text-teal-600 mt-1">
+            <FiCalendar size={14} className="mr-1" />
             {formatDate(task.dueDate)}
           </div>
         )}

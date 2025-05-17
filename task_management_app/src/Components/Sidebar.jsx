@@ -38,14 +38,14 @@ const linkData = [
     icon: <MdOutlinePendingActions />,
   },
   {
-    label: "Team",
-    link: "/users",
-    icon: <FaUsers />,
-  },
-  {
     label: "Trash",
     link: "/bin",
     icon: <FaTrashAlt />,
+  },
+  {
+    label: "Team",
+    link: "/users",
+    icon: <FaUsers />,
   },
 ];
 
@@ -53,7 +53,7 @@ const Sidebar = () => {
   const { user } = useAuth();
   // console.log("Sidebar user:", user);
   const location = useLocation();
-  const sidebarLinks = user?.isAdmin ? linkData : linkData.slice(0, 5);
+  const sidebarLinks = user?.isAdmin ? linkData : linkData.slice(0, );
 
   return (
     <div className="w-full h-full flex flex-col gap-6 p-5 bg-[#FEF9F0] border-r border-gray-200">

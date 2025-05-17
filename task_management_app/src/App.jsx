@@ -70,7 +70,7 @@ function App() {
     <div>
       <Routes>
         <Route element={<MainFrame />}>
-          <Route path="/" element={<Navigate to="/dashboard" />} />
+          <Route path="/" element={<Navigate to="/login" />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/tasks" element={<Tasks />} />
           <Route path="/completedTasks/:status" element={<Tasks />} />

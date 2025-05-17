@@ -58,14 +58,14 @@ export const login = async (email, password) => {
 };
 
 // Register API call
-export const register = async (name, email, password) => {
+export const register = async (name, email, password, isAdmin = false) => {
   try {
     const response = await fetch(`${API_URI}/auth/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ name, email, password }),
+      body: JSON.stringify({ name, email, password, isAdmin }), // ✅ Send isAdmin to backend
     });
 
     const data = await response.json();
@@ -86,6 +86,34 @@ export const logout = async () => {
   // Just clear local storage, no need for server call
   localStorage.removeItem("userInfo");
   localStorage.removeItem("token");
+};
+
+// Update user profile
+export const updateUserProfile = async (userData) => {
+  try {
+    const response = await fetchWithToken("/auth/profile", {
+      method: "PUT",
+      body: JSON.stringify(userData),
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Failed to update profile:", error);
+    throw error;
+  }
+};
+
+// Update password
+export const updatePassword = async (currentPassword, newPassword) => {
+  try {
+    const response = await fetchWithToken("/auth/password", {
+      method: "PUT",
+      body: JSON.stringify({ currentPassword, newPassword }),
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Failed to update password:", error);
+    throw error;
+  }
 };
 
 // Task API calls

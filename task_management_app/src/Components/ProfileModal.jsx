@@ -64,90 +64,129 @@ const ProfileModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto">
-        <div className="flex justify-between items-center p-5 border-b border-gray-100">
-          <h2 className="text-xl font-bold text-[#111827]">My Profile</h2>
+    <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4 sm:p-6">
+      <div
+        className="bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto
+                  ring-1 ring-black ring-opacity-5
+                  flex flex-col"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="profile-modal-title"
+      >
+        <header className="flex justify-between items-center p-6 border-b border-gray-200">
+          <h2
+            id="profile-modal-title"
+            className="text-2xl font-extrabold text-gray-900 tracking-tight"
+          >
+            My Profile
+          </h2>
           <button
             onClick={onClose}
-            className="p-1.5 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-full transition-colors"
+            aria-label="Close profile modal"
+            className="p-2 rounded-full text-gray-500 hover:text-gray-800 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-teal-400 transition"
           >
-            <FiX size={20} />
+            <FiX size={22} />
           </button>
-        </div>
+        </header>
 
-        <form onSubmit={handleSubmit} className="p-5 space-y-4">
+        <form
+          onSubmit={handleSubmit}
+          className="p-6 space-y-6 flex-grow flex flex-col"
+        >
           {error && (
-            <div className="bg-red-50 text-red-600 p-3 rounded-md text-sm">
+            <div className="bg-red-100 text-red-700 px-4 py-3 rounded-lg text-sm font-medium shadow-sm animate-fadeIn">
               {error}
             </div>
           )}
 
           {success && (
-            <div className="bg-green-50 text-green-600 p-3 rounded-md text-sm">
+            <div className="bg-green-100 text-green-700 px-4 py-3 rounded-lg text-sm font-medium shadow-sm animate-fadeIn">
               {success}
             </div>
           )}
 
-          <div className="flex justify-center mb-4">
-            <div className="w-24 h-24 rounded-full bg-[#14B8A6] flex items-center justify-center text-white text-3xl font-semibold">
-              {user?.name?.charAt(0) || "U"}
+          <div className="flex justify-center mb-6">
+            <div
+              className="w-28 h-28 rounded-full bg-teal-600 flex items-center justify-center
+                     text-white text-5xl font-bold select-none shadow-lg
+                     ring-4 ring-teal-300/60"
+              aria-label="User avatar with initial"
+            >
+              {user?.name?.charAt(0).toUpperCase() || "U"}
             </div>
           </div>
 
-          <div>
+          <div className="space-y-1 w-full">
             <label
               htmlFor="name"
-              className="block text-sm font-medium text-gray-700 mb-1"
+              className="block text-sm font-semibold text-gray-800"
             >
               Full Name
             </label>
             <div className="relative">
-              <FiUser className="absolute left-3 top-1/2 -translate-y-1/2 text-[#14B8A6]" />
+              <FiUser className="absolute left-4 top-1/2 -translate-y-1/2 text-teal-600 text-lg" />
               <input
                 type="text"
                 id="name"
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-md focus:ring-[#14B8A6] focus:border-[#14B8A6]"
+                className="pl-12 pr-4 py-3 w-full border border-gray-300 rounded-xl
+                       shadow-sm placeholder-gray-400
+                       focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-teal-500
+                       transition duration-200 ease-in-out text-gray-900 font-medium"
+                placeholder="Enter your full name"
+                autoComplete="name"
               />
             </div>
           </div>
 
-          <div>
+          <div className="space-y-1 w-full">
             <label
               htmlFor="email"
-              className="block text-sm font-medium text-gray-700 mb-1"
+              className="block text-sm font-semibold text-gray-800"
             >
               Email Address
             </label>
             <div className="relative">
-              <FiMail className="absolute left-3 top-1/2 -translate-y-1/2 text-[#14B8A6]" />
+              <FiMail className="absolute left-4 top-1/2 -translate-y-1/2 text-teal-600 text-lg" />
               <input
                 type="email"
                 id="email"
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-md focus:ring-[#14B8A6] focus:border-[#14B8A6]"
-                disabled // Email cannot be changed
+                disabled
+                className="pl-12 pr-4 py-3 w-full border border-gray-300 rounded-xl
+                       bg-gray-100 text-gray-500 cursor-not-allowed
+                       shadow-inner
+                       focus:outline-none focus:ring-0 focus:border-gray-300
+                       transition duration-200 ease-in-out font-medium"
+                aria-disabled="true"
               />
             </div>
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-xs text-gray-500 mt-1 italic select-none">
               Email cannot be changed
             </p>
           </div>
 
-          <div className="flex justify-end space-x-3 pt-3">
+          <div className="flex justify-end space-x-4 pt-4">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors"
+              className="px-5 py-2 text-sm font-semibold text-gray-700 border border-gray-300 rounded-lg
+                     hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-teal-400 transition"
             >
               Cancel
             </button>
-            <Button type="submit" disabled={loading}>
+            <Button
+              type="submit"
+              disabled={loading}
+              className="px-6 py-2 text-sm font-semibold
+                     bg-teal-600 text-white rounded-lg shadow-md
+                     hover:bg-teal-700 focus:outline-none focus:ring-4 focus:ring-teal-400 focus:ring-opacity-50
+                     transition disabled:opacity-50 disabled:cursor-not-allowed"
+            >
               {loading ? "Saving..." : "Save Changes"}
             </Button>
           </div>
