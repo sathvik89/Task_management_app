@@ -1,4 +1,4 @@
-const API_URI = "https://task-management-app-4262.onrender.com";
+const API_URI = "https://task-management-app-4262.onrender.com/api";
 
 // Helper to attach Authorization header using stored token
 export const fetchWithToken = async (url, options = {}) => {
