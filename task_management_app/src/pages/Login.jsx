@@ -76,11 +76,11 @@ export default function Login() {
   const fillDemoCredentials = (type) => {
     if (type === "admin") {
       emailRef.current.value = "boss@gmail.com";
-      passwordRef.current.value = "boss@9";
+      passwordRef.current.value = "boss@1234";
       setIsAdmin(true);
     } else {
       emailRef.current.value = "user@gmail.com";
-      passwordRef.current.value = "123456";
+      passwordRef.current.value = "user@1234";
       setIsAdmin(false);
     }
     // Clear any previous errors
