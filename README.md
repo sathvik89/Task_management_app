@@ -6,7 +6,7 @@ TaskEase is a full-stack task management application built using the MERN stack 
 
 - Frontend: React, React Router, Tailwind CSS
 - Backend: Node.js, Express.js, MongoDB, JWT
-- Tools: Postman (for API testing), Git and GitHub
+- Tools: Postman (for API testing)
 
 ## Features
 
