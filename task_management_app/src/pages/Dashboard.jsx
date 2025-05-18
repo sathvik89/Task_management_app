@@ -4,6 +4,9 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../AuthContext";
 import { useTaskContext } from "../TaskContext";
 import { Link } from "react-router-dom";
+// import {Link} from "react-router-dom"; import{" "}
+//       {(FiList, FiClock, FiActivity, FiCheckCircle)} from "react-icons/fi"; //
+//       Inside your Dashboard component:
 import {
   FiCalendar,
   FiClock,
@@ -123,10 +126,13 @@ const Dashboard = () => {
           <span>add New Task</span>
         </button>
       </div>
-
       {/* Stats Cards */}
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
-        <div className="bg-white p-5 rounded-xl shadow-md border border-gray-100 hover:shadow-lg transition-shadow">
+        <Link
+          to="/tasks"
+          className="bg-white p-5 rounded-xl shadow-md border border-gray-100 hover:shadow-lg transition-shadow"
+        >
           <div className="flex items-center justify-between">
             <div>
               <p className="text-gray-500 text-sm">Total Tasks</p>
@@ -138,9 +144,12 @@ const Dashboard = () => {
               <FiList className="text-[#14B8A6] text-xl" />
             </div>
           </div>
-        </div>
+        </Link>
 
-        <div className="bg-white p-5 rounded-xl shadow-md border border-gray-100 hover:shadow-lg transition-shadow">
+        <Link
+          to="/todoTasks/todo"
+          className="bg-white p-5 rounded-xl shadow-md border border-gray-100 hover:shadow-lg transition-shadow"
+        >
           <div className="flex items-center justify-between">
             <div>
               <p className="text-gray-500 text-sm">To Do</p>
@@ -152,9 +161,12 @@ const Dashboard = () => {
               <FiClock className="text-amber-500 text-xl" />
             </div>
           </div>
-        </div>
+        </Link>
 
-        <div className="bg-white p-5 rounded-xl shadow-md border border-gray-100 hover:shadow-lg transition-shadow">
+        <Link
+          to="/inProgressTasks/in-progress"
+          className="bg-white p-5 rounded-xl shadow-md border border-gray-100 hover:shadow-lg transition-shadow"
+        >
           <div className="flex items-center justify-between">
             <div>
               <p className="text-gray-500 text-sm">In Progress</p>
@@ -166,9 +178,12 @@ const Dashboard = () => {
               <FiActivity className="text-blue-500 text-xl" />
             </div>
           </div>
-        </div>
+        </Link>
 
-        <div className="bg-white p-5 rounded-xl shadow-md border border-gray-100 hover:shadow-lg transition-shadow">
+        <Link
+          to="/completedTasks/completed"
+          className="bg-white p-5 rounded-xl shadow-md border border-gray-100 hover:shadow-lg transition-shadow"
+        >
           <div className="flex items-center justify-between">
             <div>
               <p className="text-gray-500 text-sm">Completed</p>
@@ -180,9 +195,8 @@ const Dashboard = () => {
               <FiCheckCircle className="text-[#14B8A6] text-xl" />
             </div>
           </div>
-        </div>
+        </Link>
       </div>
-
       {/* Middle Section - Progress and Urgent Tasks */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         {/* Progress Overview */}
@@ -330,7 +344,6 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-
       {/* Upcoming Tasks Section */}
       <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6 mb-8">
         <div className="flex justify-between items-center mb-5">
@@ -400,7 +413,6 @@ const Dashboard = () => {
           </div>
         )}
       </div>
-
       {/* Recent Activity Section */}
       <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6">
         <div className="flex justify-between items-center mb-5">
@@ -461,7 +473,6 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-
       {/* Task Modal */}
       <TaskModal
         isOpen={isModalOpen}

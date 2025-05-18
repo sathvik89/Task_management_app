@@ -85,8 +85,8 @@ const Users = () => {
       </h1>
 
       {users.length > 0 ? (
-        <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100">
-          <div className="overflow-x-auto">
+        <div className="bg-white rounded-xl shadow-lg overflow-scroll border border-gray-100">
+          <div className="w-full overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
