@@ -22,8 +22,8 @@ Deployed link: [https://task-management-app-three-gray.vercel.app/login](https:/
 
 ## Project Structure
 
-- `task-management-app/` – React app
-- `task-management-backend/` – Node.js and Express API
+- `task_management_app/` – React app
+- `task_management_backend/` – Node.js and Express API
 
 ## Notes
 
