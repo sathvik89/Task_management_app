@@ -85,66 +85,44 @@ const Users = () => {
       </h1>
 
       {users.length > 0 ? (
-        <div className="bg-white rounded-xl shadow-lg overflow-scroll border border-gray-100">
-          <div className="w-full overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  {["User", "Email", "Role", "Status"].map((title) => (
-                    <th
-                      key={title}
-                      scope="col"
-                      className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wide select-none"
-                    >
-                      {title}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                {users.map((u) => (
-                  <tr
-                    key={u._id}
-                    className="hover:bg-gray-50 transition-colors duration-200"
-                  >
-                    <td className="px-4 py-4 whitespace-normal md:whitespace-nowrap max-w-xs md:max-w-full">
-                      <div className="flex items-center space-x-4">
-                        <div className="flex-shrink-0 h-10 w-10 bg-[#14B8A6] rounded-full flex items-center justify-center text-white text-lg shadow-md">
-                          <FiUser />
-                        </div>
-                        <div className="text-sm font-semibold text-[#111827] truncate max-w-[150px] sm:max-w-xs md:max-w-none">
-                          {u.name}
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-4 py-4 whitespace-normal md:whitespace-nowrap text-sm text-gray-600 max-w-[200px] sm:max-w-md truncate">
-                      <div className="flex items-center space-x-2">
-                        <FiMail className="text-gray-400 flex-shrink-0" />
-                        <span className="truncate">{u.email}</span>
-                      </div>
-                    </td>
-                    <td className="px-4 py-4 whitespace-nowrap">
-                      <span
-                        className={`inline-block px-3 py-1 text-xs font-semibold rounded-full shadow-sm select-none ${
-                          u.isAdmin
-                            ? "bg-purple-100 text-purple-800"
-                            : "bg-gray-100 text-gray-800"
-                        }`}
-                      >
-                        {u.isAdmin ? "Admin" : "User"}
-                      </span>
-                    </td>
-                    <td className="px-4 py-4 whitespace-nowrap">
-                      <div className="flex items-center text-sm text-green-600 font-medium select-none">
-                        <FiUserCheck className="mr-2" />
-                        Active
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {users.map((u) => (
+            <div
+              key={u._id}
+              className="bg-white shadow-md rounded-xl p-5 flex flex-col space-y-3 border border-gray-100"
+            >
+              <div className="flex items-center space-x-4">
+                <div className="flex-shrink-0 h-10 w-10 bg-[#14B8A6] rounded-full flex items-center justify-center text-white text-lg shadow-md">
+                  <FiUser />
+                </div>
+                <div className="text-sm font-semibold text-[#111827] truncate">
+                  {u.name}
+                </div>
+              </div>
+
+              <div className="flex items-center text-sm text-gray-600 space-x-2">
+                <FiMail className="text-gray-400" />
+                <span className="truncate">{u.email}</span>
+              </div>
+
+              <div>
+                <span
+                  className={`inline-block px-3 py-1 text-xs font-semibold rounded-full shadow-sm select-none ${
+                    u.isAdmin
+                      ? "bg-purple-100 text-purple-800"
+                      : "bg-gray-100 text-gray-800"
+                  }`}
+                >
+                  {u.isAdmin ? "Admin" : "User"}
+                </span>
+              </div>
+
+              <div className="flex items-center text-sm text-green-600 font-medium select-none">
+                <FiUserCheck className="mr-2" />
+                Active
+              </div>
+            </div>
+          ))}
         </div>
       ) : (
         <div className="bg-white rounded-lg shadow-lg p-10 text-center select-none">

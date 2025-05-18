@@ -45,7 +45,7 @@ const Trash = () => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
       <h1 className="text-2xl md:text-3xl font-extrabold text-[#111827] mb-8 select-none">
         Trash
       </h1>
@@ -55,82 +55,48 @@ const Trash = () => {
           <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-[#14B8A6]"></div>
         </div>
       ) : deletedTasks.length > 0 ? (
-        <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100">
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th
-                    scope="col"
-                    className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider select-none"
-                  >
-                    Task
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider select-none"
-                  >
-                    Category
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider select-none"
-                  >
-                    Due Date
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider select-none"
-                  >
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                {deletedTasks.map((task) => (
-                  <tr
-                    key={task._id}
-                    className="hover:bg-gray-50 transition-colors duration-200"
-                  >
-                    <td className="px-4 py-4 whitespace-normal md:whitespace-nowrap max-w-xs md:max-w-full">
-                      <div className="text-sm font-semibold text-[#111827] truncate">
-                        {task.title}
-                      </div>
-                      <div className="text-xs text-gray-500 mt-1 line-clamp-2 md:line-clamp-1">
-                        {task.description || "No description"}
-                      </div>
-                    </td>
-                    <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {task.category || "Other"}
-                    </td>
-                    <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {task.dueDate ? formatDate(task.dueDate) : "No due date"}
-                    </td>
-                    <td className="px-4 py-4 whitespace-nowrap">
-                      <div className="flex space-x-3">
-                        <button
-                          onClick={() => handleRestore(task._id)}
-                          className="p-2 text-[#14B8A6] hover:bg-[#E0F2F1] rounded-lg transition-colors shadow-sm"
-                          title="Restore"
-                          aria-label="Restore task"
-                        >
-                          <FiRefreshCw size={18} />
-                        </button>
-                        <button
-                          onClick={() => handlePermanentDelete(task._id)}
-                          className="p-2 text-red-600 hover:bg-red-100 rounded-lg transition-colors shadow-sm"
-                          title="Delete Permanently"
-                          aria-label="Delete task permanently"
-                        >
-                          <FiTrash2 size={18} />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {deletedTasks.map((task) => (
+            <div
+              key={task._id}
+              className="bg-white border border-gray-200 rounded-2xl shadow-lg p-5 flex flex-col justify-between"
+            >
+              <div className="mb-4">
+                <h2 className="text-lg font-bold text-gray-800 mb-1 truncate">
+                  {task.title}
+                </h2>
+                <p className="text-sm text-gray-500 line-clamp-3">
+                  {task.description || "No description"}
+                </p>
+              </div>
+              <div className="text-sm text-gray-600 mb-4 space-y-1">
+                <p>
+                  <span className="font-medium text-gray-700">Category:</span>{" "}
+                  {task.category || "Other"}
+                </p>
+                <p>
+                  <span className="font-medium text-gray-700">Due:</span>{" "}
+                  {task.dueDate ? formatDate(task.dueDate) : "No due date"}
+                </p>
+              </div>
+              <div className="flex items-center justify-end gap-3 mt-auto">
+                <button
+                  onClick={() => handleRestore(task._id)}
+                  className="flex items-center gap-1 px-3 py-1.5 bg-[#E0F2F1] text-[#14B8A6] hover:bg-[#CCFBF1] rounded-lg text-sm font-medium shadow-sm transition-all"
+                >
+                  <FiRefreshCw size={16} />
+                  Restore
+                </button>
+                <button
+                  onClick={() => handlePermanentDelete(task._id)}
+                  className="flex items-center gap-1 px-3 py-1.5 bg-red-100 text-red-600 hover:bg-red-200 rounded-lg text-sm font-medium shadow-sm transition-all"
+                >
+                  <FiTrash2 size={16} />
+                  Delete
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
       ) : (
         <div className="bg-white rounded-lg shadow-lg p-10 text-center select-none">
