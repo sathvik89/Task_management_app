@@ -27,4 +27,4 @@ Deployed link: [https://task-management-app-three-gray.vercel.app/login](https:/
 
 ## Notes
 
-This project was built as part of an internship assignment. AI tools were used during development to understand and fix issues, especially related to authentication, backend logic, and UI structure.
+AI tools were used during development to understand and fix issues, especially related to UI structure.
